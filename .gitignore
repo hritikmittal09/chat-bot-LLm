@@ -12,3 +12,4 @@ venv/
 
 # Ignore models folder
 models/
+*.spec
