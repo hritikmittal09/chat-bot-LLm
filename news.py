@@ -10,16 +10,16 @@ Api_key = os.getenv("news_api_key")
 
 
 def news():
-   # load_dotenv()
     my_news = NewsApiClient(api_key=Api_key)
     response = my_news.get_top_headlines()  # 🇮🇳 India
     
-   # print("DEBUG Response:", response)  # 👈 check what API returns
-    
     articles = response.get("articles", [])
-    titles = [article["title"] for article in articles if article.get("title")]
-
-    return titles  
+    
+    # ✅ Fetch only descriptions
+    descriptions = [article["description"] for article in articles if article.get("description")]
+    
+    print(descriptions)
+    return descriptions  
    
     
     
