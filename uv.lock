@@ -192,8 +192,10 @@ dependencies = [
     { name = "edge-tts" },
     { name = "langchain" },
     { name = "langchain-ollama" },
+    { name = "newsapi-python" },
     { name = "ollama" },
     { name = "pyinstaller" },
+    { name = "python-dotenv" },
     { name = "pyttsx3" },
     { name = "streamlit" },
     { name = "wikipedia" },
@@ -204,8 +206,10 @@ requires-dist = [
     { name = "edge-tts", specifier = ">=7.2.3" },
     { name = "langchain", specifier = ">=0.3.27" },
     { name = "langchain-ollama", specifier = ">=0.3.7" },
+    { name = "newsapi-python", specifier = ">=0.2.7" },
     { name = "ollama", specifier = ">=0.5.3" },
     { name = "pyinstaller", specifier = ">=6.15.0" },
+    { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "pyttsx3", specifier = ">=2.99" },
     { name = "streamlit", specifier = ">=1.49.1" },
     { name = "wikipedia", specifier = ">=1.4.0" },
@@ -624,6 +628,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ec/8f/b0a99455f6e5fe2d4e77deeee8b133cfa06e1f5441c77a70defdbbfbf639/narwhals-2.4.0.tar.gz", hash = "sha256:a71931f7fb3c8e082cbe18ef0740644d87d60eba841ddfa9ba9394de1d43062f", size = 556886, upload-time = "2025-09-08T13:17:36.732Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8a/8c/ac6f6bd2d118ac49e1bc0285e401c1dc50cf878d48156bbc7969902703b0/narwhals-2.4.0-py3-none-any.whl", hash = "sha256:06d958b03e3e3725ae16feee6737b4970991bb52e8465ef75f388c574732ac59", size = 406233, upload-time = "2025-09-08T13:17:35.071Z" },
+]
+
+[[package]]
+name = "newsapi-python"
+version = "0.2.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f8/4b/12fb9495211fc5a6d3a96968759c1a48444124a1654aaf65d0de80b46794/newsapi-python-0.2.7.tar.gz", hash = "sha256:a4b66d5dd9892198cdaa476f7542f2625cdd218e5e3121c8f880b2ace717a3c2", size = 7485, upload-time = "2023-03-02T13:15:35.89Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/74/47/e3b099102f0c826d37841d2266e19f1568dcf58ba86e4c6948e2a124f91d/newsapi_python-0.2.7-py2.py3-none-any.whl", hash = "sha256:11d34013a24d92ca7b7cbdac84ed2d504862b1e22467bc2a9a6913a70962318e", size = 7942, upload-time = "2023-03-02T13:15:34.475Z" },
 ]
 
 [[package]]
@@ -3575,6 +3591,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
+]
+
+[[package]]
+name = "python-dotenv"
+version = "1.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/b0/4bc07ccd3572a2f9df7e6782f52b0c6c90dcbb803ac4a167702d7d0dfe1e/python_dotenv-1.1.1.tar.gz", hash = "sha256:a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab", size = 41978, upload-time = "2025-06-24T04:21:07.341Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5f/ed/539768cf28c661b5b068d66d96a2f155c4971a5d55684a514c1a0e0dec2f/python_dotenv-1.1.1-py3-none-any.whl", hash = "sha256:31f23644fe2602f88ff55e1f5c79ba497e01224ee7737937930c448e4d0e24dc", size = 20556, upload-time = "2025-06-24T04:21:06.073Z" },
 ]
 
 [[package]]
