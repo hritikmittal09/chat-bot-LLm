@@ -1,9 +1,9 @@
 import streamlit as st
+import threading
 from langchain_ollama import OllamaLLM
 from spech import speak
 from weapia_seaech import wiki_summary  # your Wikipedia function
 from news import news
-import threading
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")   # replace with your model name
@@ -26,16 +26,17 @@ if "speaking_news" not in st.session_state:
 if "news_buffer" not in st.session_state:
     st.session_state.news_buffer = None   # temporary buffer for thread results
 
-# --- Function to fetch & speak news ---
-def fetch_and_speak_news():
+
+# --- Background task for fetching & speaking news ---
+def fetch_and_speak_news(callback):
     try:
         titles = news()  # should return list of titles
         if not titles:
-            st.session_state.news_buffer = "⚠️ No news found."
+            callback("⚠️ No news found.")
             return
 
         news_text = "Here are the latest news headlines:\n\n" + "\n".join([f"- {t}" for t in titles])
-        st.session_state.news_buffer = news_text  # store in buffer
+        callback(news_text)  # update session state safely
 
         # Speak headlines one by one
         st.session_state.speaking_news = True
@@ -45,13 +46,23 @@ def fetch_and_speak_news():
             speak(t)
 
     except Exception as e:
-        st.session_state.news_buffer = f"❌ Error fetching news: {e}"
+        callback(f"❌ Error fetching news: {e}")
+
+
+# --- Safe updater for session state ---
+def update_news_buffer(text):
+    st.session_state.news_buffer = text
+
 
 # --- Handle Listen News toggle ---
 if listen_news:
     if not st.session_state.speaking_news and st.session_state.news_buffer is None:
         with st.spinner("📰 Fetching news..."):
-            threading.Thread(target=fetch_and_speak_news, daemon=True).start()
+            threading.Thread(
+                target=fetch_and_speak_news,
+                args=(update_news_buffer,),
+                daemon=True
+            ).start()
 else:
     st.session_state.speaking_news = False
 
@@ -85,7 +96,7 @@ if user_input:
     # Add bot response
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # Speak
+    # Speak response
     speak(response)
 
 # --- Show chat history ---
