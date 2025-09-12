@@ -4,6 +4,7 @@ from langchain_ollama import OllamaLLM
 from spech import speak
 from weapia_seaech import wiki_summary  # your Wikipedia function
 from news import news
+from File_Explore import getShortcutsList, openFile
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")   # replace with your model name
@@ -17,6 +18,9 @@ st.write("Type below and I’ll reply with text + speech.")
 st.sidebar.header("⚙️ Options")
 use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
 listen_news = st.sidebar.toggle("📰 Listen News")
+fileExplor = st.sidebar.selectbox("File Explorer" ,['']+ getShortcutsList())
+openFile(fileExplor)
+
 
 # --- Initialize session state ---
 if "messages" not in st.session_state:
