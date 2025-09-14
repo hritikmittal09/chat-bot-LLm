@@ -10,7 +10,7 @@ wheels/
 # Virtual environments
 .venv/
 venv/
-
+main.py - Shortcut.lnk
 # Ignore models folder
 models/
 *.spec
