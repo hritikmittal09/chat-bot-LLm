@@ -14,3 +14,4 @@ main.py - Shortcut.lnk
 # Ignore models folder
 models/
 *.spec
+*.json
