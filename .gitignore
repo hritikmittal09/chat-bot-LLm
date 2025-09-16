@@ -13,5 +13,6 @@ venv/
 main.py - Shortcut.lnk
 # Ignore models folder
 models/
+filepaths.json
 *.spec
 *.json
