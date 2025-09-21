@@ -57,7 +57,7 @@ class PDFChatbot:
 
 
 if __name__ == "__main__":
-    chatbot = PDFChatbot(r"D:\chatbot\test.pdf", model_name="zera")
+    chatbot = PDFChatbot(r"test.pdf", model_name="zera")
 
     print("\n🤖 PDF QnA Chatbot Ready! Type 'quit' to exit.\n")
     while True:
