@@ -16,3 +16,4 @@ models/
 filepaths.json
 *.spec
 *.json
+*.pdf
