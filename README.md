@@ -25,7 +25,7 @@ The project uses the following dependencies:
 - `streamlit>=1.49.1` → Web UI for the chatbot.  
 - `wikipedia>=1.4.0` → Query Wikipedia for knowledge.  
 
----
+![alt text](image.png)---
 
 ## 🚀 Installation
 
