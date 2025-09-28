@@ -1,25 +1,35 @@
 import streamlit as st
 import threading
 from langchain_ollama import OllamaLLM
-from spech import speak
+from utils.spech import speak
 from weapia_seaech import wiki_summary  # your Wikipedia function
 from news import news
 from File_Explore import getShortcutsList, openFile
+from utils.voice_input import user_voiceInput
+
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")   # replace with your model name
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="Chatbot with Voice", page_icon="🤖")
-st.title("🤖 Chatbot with Voice")
+st.title("🤖 zera Chatbot with Voice")
 st.write("Type below and I’ll reply with text + speech.")
 
 # --- Sidebar controls ---
 st.sidebar.header("⚙️ Options")
 use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
 listen_news = st.sidebar.toggle("📰 Listen News")
-fileExplor = st.sidebar.selectbox("File Explorer" ,['']+ getShortcutsList())
+fileExplor = st.sidebar.selectbox("File Explorer", [''] + getShortcutsList())
 openFile(fileExplor)
+
+# 🎙 Voice Input Button
+voice_input_text = None
+if st.sidebar.button("🎙 Voice Input"):
+    st.sidebar.write("🎤 Listening...")
+    voice_input_text = user_voiceInput()
+    if not voice_input_text:
+        st.sidebar.warning("⚠️ Could not capture voice. Please try again.")
 
 
 # --- Initialize session state ---
@@ -75,8 +85,11 @@ if st.session_state.news_buffer:
     st.session_state.messages.append({"role": "assistant", "content": st.session_state.news_buffer})
     st.session_state.news_buffer = None  # clear buffer so it doesn’t repeat
 
-# --- Chat input ---
+
+# --- Chat input (text + voice merged here) ---
 user_input = st.chat_input("Say something...")
+if not user_input and voice_input_text:  # if no text but voice exists
+    user_input = voice_input_text
 
 if user_input:
     # Add user message
@@ -102,6 +115,7 @@ if user_input:
 
     # Speak response
     speak(response)
+
 
 # --- Show chat history ---
 for msg in st.session_state.messages:

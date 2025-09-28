@@ -10,9 +10,11 @@ dependencies = [
     "langchain-ollama>=0.3.7",
     "newsapi-python>=0.2.7",
     "ollama>=0.5.3",
+    "pyaudio>=0.2.14",
     "pyinstaller>=6.15.0",
     "python-dotenv>=1.1.1",
     "pyttsx3>=2.99",
+    "speechrecognition>=3.14.3",
     "streamlit>=1.49.1",
     "wikipedia>=1.4.0",
 ]
