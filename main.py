@@ -1,5 +1,5 @@
 from langchain_ollama import OllamaLLM
-from spech import speak
+from utils. spech import speak
 import os
 
 

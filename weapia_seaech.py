@@ -1,5 +1,5 @@
 import wikipedia
-from spech import speak
+from utils.spech import speak
 
 def wiki_summary(topic: str, sentences: int = 4) -> str:
     try:

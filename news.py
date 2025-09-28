@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from newsapi import NewsApiClient
-from spech import speak
+from  utils. spech import speak
 
 url = 'https://newsi-app.com/api/local?language=en&country=us&sort=top&page=1&limit=20'
 load_dotenv()

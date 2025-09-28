@@ -5,7 +5,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_ollama import OllamaLLM
 import os
-from spech import speak
+from utils. spech import speak
 
 
 def pdf_reader(filepath = ''):# Path to your PDF
