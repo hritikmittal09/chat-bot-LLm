@@ -3,9 +3,10 @@
 
 
 ## 📌 Project Overview
-**Name:** chatbot2  
+
 **Version:** 0.1.0  
-**Description:** Add your description here  
+**Description:** Zera is an intelligent, voice-enabled AI chatbot powered by Ollama and LangChain, featuring real-time text-to-speech, knowledge retrieval, and an elegant Streamlit-based web interface.
+It can chat naturally, read responses aloud, and fetch information dynamically from the web and Wikipedia.
 **Readme:** README.md  
 **Python Requirement:** >=3.13  
 
