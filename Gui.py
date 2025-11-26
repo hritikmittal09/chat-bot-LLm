@@ -6,6 +6,7 @@ from weapia_seaech import wiki_summary  # your Wikipedia function
 from news import news
 from File_Explore import getShortcutsList, openFile
 from utils.voice_input import user_voiceInput
+from Uicomponents.clock import sidebar_timer
 
 
 # ✅ Initialize Ollama
@@ -22,6 +23,9 @@ use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
 listen_news = st.sidebar.toggle("📰 Listen News")
 fileExplor = st.sidebar.selectbox("File Explorer", [''] + getShortcutsList())
 openFile(fileExplor)
+
+sidebar_timer()
+
 
 # 🎙 Voice Input Button
 voice_input_text = None
