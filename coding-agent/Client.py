@@ -1,11 +1,14 @@
 from google import genai
 from dotenv import load_dotenv
 from google.genai import types
+from functions.getFileInfo import get_files_info
 import os
 
 load_dotenv()
 
 GAMINI_API_KEY = os.getenv("GAMNI_API-KEY")
+
+print(get_files_info("Calculartor/pkg"))
 prompt = input("enter prompt")
 messages =[
      types.Content(role="user", parts=[types.Part(text=prompt)])
