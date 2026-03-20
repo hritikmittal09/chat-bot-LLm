@@ -13,7 +13,12 @@ GAMINI_API_KEY = os.getenv("GAMNI_API-KEY")
 print(get_file_content("Calculartor", "icalcular.py"))
 prompt = input("enter prompt")
 messages =[
-     types.Content(role="user", parts=[types.Part(text=prompt)])
+     types.Content(role="user", parts=[types.Part(text=prompt)]),
+       types.Content(
+        role="system",
+        parts=[types.Part(text="You are a helpful Python expert who explains code clearly.")]
+    )
+     
 ]
 
 # The client gets the API key from the environment variable `GEMINI_API_KEY`.
