@@ -14,21 +14,13 @@ tool_map = {
     "write_file":       write_file,
 }
 
-def call_function(function_call_part, verbose=False):
-    name = function_call_part.name
-    args = dict(function_call_part.args)
-    args["working_directory"] = WORKING_DIR  # ✅ hardcoded working dir
-
-    if verbose:
-        print(f"🔧 calling: {name}({args})")
+def call_function(function_call, verbose=False):
+    name = function_call.name
+    args = dict(function_call.args)
+    args["working_directory"] = WORKING_DIR  # ✅ inject once
 
     fn = tool_map.get(name)
     if fn is None:
         return f'Error: unknown function "{name}"'
 
-    result = fn(**args)
-
-    if verbose:
-        print(f"   → {result[:200]}")
-
-    return result
+    return fn(**args)  # ✅ call only once

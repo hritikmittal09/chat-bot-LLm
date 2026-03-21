@@ -1,7 +1,7 @@
 from google import genai
 from dotenv import load_dotenv
 from google.genai import types
-from functions.getFileInfo import get_files_info, schema_get_files_info
+from functions.getFileInfo import schema_get_files_info
 from functions.get_file_content import schema_get_file_content
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_make_dir, schema_write_file
@@ -14,18 +14,13 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 prompt = input("Enter prompt: ")
 
-tool_map = {
-    "get_files_info": get_files_info,
-}
-
-
 config = types.GenerateContentConfig(
     system_instruction=(
         "You are a helpful coding agent.\n"
         "Use get_files_info to list files when needed.\n"
         "Use get_file_content to read file contents when the user asks to open/read a file.\n"
-        "use run_python_file to run a specific python file when needed when user asks run .\n"
-        "use make_dir to make a directory when needed\n" 
+        "use run_python_file to run a specific python file when needed when user asks run.\n"
+        "use make_dir to make a directory when needed\n"
         "use write_file to write or overwrite the files if needed\n"
         "Always call the appropriate tool instead of guessing file content.\n"
     ),
@@ -33,10 +28,10 @@ config = types.GenerateContentConfig(
         types.Tool(
             function_declarations=[
                 schema_get_files_info,
-                schema_get_file_content,  # ✅ fixed
+                schema_get_file_content,
                 schema_run_python_file,
                 schema_make_dir,
-                schema_write_file
+                schema_write_file,
             ]
         )
     ],
@@ -48,22 +43,44 @@ messages = [
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-response = client.models.generate_content(
+# ✅ agent loop — max 20 iterations for safety
+for i in range(20):
+    response = client.models.generate_content(
         model="gemini-2.5-flash-lite",
         contents=messages,
         config=config,
     )
 
-if response.function_calls:
+    # ✅ safety check
+    candidate = response.candidates[0]
+    if candidate.content is None or candidate.content.parts is None:
+        print("No response, reason:", candidate.finish_reason)
+        break
+
+    # no tool calls = final answer
+    if not response.function_calls:
+        print(response.text)
+        break
+
+    # append model response to history
+    messages.append(candidate.content)
+
+    # run tools and collect results
+    tool_results = []
     for function_call in response.function_calls:
-       print( f"calling function- {function_call.name} {function_call.args}")
-       res = call_function(function_call,False)
-       print(res)
+        print(f"🔧 calling: {function_call.name}({function_call.args})")
+        result = call_function(function_call, verbose=False)
+        print(f"   → {result}")
+        tool_results.append(
+            types.Part(
+                function_response=types.FunctionResponse(
+                    name=function_call.name,
+                    response={"result": result},
+                )
+            )
+        )
 
-else :
-    print(response.text)
-    
-
-
-
-    
+    # send results back
+    messages.append(
+        types.Content(role="user", parts=tool_results)
+    )
