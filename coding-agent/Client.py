@@ -1,34 +1,45 @@
 from google import genai
 from dotenv import load_dotenv
 from google.genai import types
-from functions.getFileInfo import get_files_info
-from functions.get_file_content import get_file_content
-from functions.get_file_content import get_file_content
-from functions.write_file import write_file, make_dir
-from functions.run_python_file import run_python_file
+from functions.getFileInfo import get_files_info, schema_get_files_info
 
 import os
 
 load_dotenv()
 
-GAMINI_API_KEY = os.getenv("GAMNI_API-KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-print(get_file_content("Calculartor", "icalcular.py"))
-prompt = input("enter prompt")
-messages =[
-     types.Content(role="user", parts=[types.Part(text=prompt)]),
-       types.Content(
-        role="system",
-        parts=[types.Part(text="You are a helpful Python expert who explains code clearly.")]
-    )
-     
+prompt = input("Enter prompt: ")
+
+tool_map = {
+    "get_files_info": get_files_info,
+}
+
+
+config = types.GenerateContentConfig(
+    system_instruction="You are a helpful coding agent. Use the get_files_info tool to list files when asked.",
+    tools=[types.Tool(function_declarations=[schema_get_files_info])],  # ✅ wrap it
+)
+
+messages = [
+    types.Content(role="user", parts=[types.Part(text=prompt)]),
 ]
 
-# The client gets the API key from the environment variable `GEMINI_API_KEY`.
-client = genai.Client(api_key=GAMINI_API_KEY)
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 response = client.models.generate_content(
-model="gemini-2.5-flash-lite",
- contents= messages
-)
-print(response.text)
+        model="gemini-2.5-flash-lite",
+        contents=messages,
+        config=config,
+    )
+
+if response.function_calls:
+    for function_call in response.function_calls:
+       print( f"calling function- {function_call.name} {function_call.args}")
+else :
+    print(response.text)
+    
+
+
+
+    

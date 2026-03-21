@@ -1,7 +1,13 @@
 import os
+from google.genai import types
+
+
+
  
  
-def get_files_info(working_directory, directory=None):
+def get_files_info(working_directory= ".", directory=None):
+    """List files in a directory. Returns file names, sizes, and is_dir flags."""
+    ...
     abs_working_dir = os.path.abspath(working_directory)
  
     if directory is None:
@@ -22,3 +28,18 @@ def get_files_info(working_directory, directory=None):
         final_response += f"- {content}: file_size={size} bytes, is_dir={is_dir}\n"
  
     return final_response
+
+schema_get_files_info = types.FunctionDeclaration(
+    name="get_files_info",
+    description="Lists files in the specified directory along with their sizes",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "directory": types.Schema(
+                type=types.Type.STRING,
+                description="The directory to list files from, relative to..."
+            ),
+        },
+    ),
+)
+
