@@ -1,0 +1,34 @@
+import os
+from functions.getFileInfo import get_files_info
+from functions.get_file_content import get_file_content
+from functions.run_python_file import run_python_file
+from functions.write_file import make_dir, write_file
+
+WORKING_DIR = "Calculartor"
+
+tool_map = {
+    "get_files_info":   get_files_info,
+    "get_file_content": get_file_content,
+    "run_python_file":  run_python_file,
+    "make_dir":         make_dir,
+    "write_file":       write_file,
+}
+
+def call_function(function_call_part, verbose=False):
+    name = function_call_part.name
+    args = dict(function_call_part.args)
+    args["working_directory"] = WORKING_DIR  # ✅ hardcoded working dir
+
+    if verbose:
+        print(f"🔧 calling: {name}({args})")
+
+    fn = tool_map.get(name)
+    if fn is None:
+        return f'Error: unknown function "{name}"'
+
+    result = fn(**args)
+
+    if verbose:
+        print(f"   → {result[:200]}")
+
+    return result

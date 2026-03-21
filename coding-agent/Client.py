@@ -5,7 +5,7 @@ from functions.getFileInfo import get_files_info, schema_get_files_info
 from functions.get_file_content import schema_get_file_content
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_make_dir, schema_write_file
-
+from callFuction import call_function
 import os
 
 load_dotenv()
@@ -57,6 +57,9 @@ response = client.models.generate_content(
 if response.function_calls:
     for function_call in response.function_calls:
        print( f"calling function- {function_call.name} {function_call.args}")
+       res = call_function(function_call,False)
+       print(res)
+
 else :
     print(response.text)
     
