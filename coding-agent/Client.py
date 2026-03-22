@@ -45,7 +45,7 @@ messages = [
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 # ✅ agent loop — max 20 iterations for safety
-for i in range(5):
+for i in range(10):
     response = client.models.generate_content(
         model=MODEL,
         contents=messages,
@@ -73,13 +73,13 @@ for i in range(5):
         result = call_function(function_call, verbose=False)
         print(f"   → {result}")
         tool_results.append(
-            types.Part(
-                function_response=types.FunctionResponse(
-                    name=function_call.name,
-                    response={"result": result},
-                )
-            )
+    types.Part(
+        function_response=types.FunctionResponse(
+            name=function_call.name,
+            response={"result": str(result)},  # ← force string
         )
+    )
+)
 
     # send results back
     messages.append(
