@@ -11,6 +11,7 @@ import os
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+MODEL = os.getenv("MODEL")
 
 prompt = input("Enter prompt: ")
 
@@ -44,9 +45,9 @@ messages = [
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 # ✅ agent loop — max 20 iterations for safety
-for i in range(20):
+for i in range(5):
     response = client.models.generate_content(
-        model="gemini-2.5-flash-lite",
+        model=MODEL,
         contents=messages,
         config=config,
     )
