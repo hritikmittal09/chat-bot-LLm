@@ -91,6 +91,78 @@ uv pip install -r pyproject.toml
 
 ---
 
+## 🗂️ File Explorer Setup
+
+Zera supports a **File Explorer** feature that lets you open apps and websites directly by voice or chat command.
+
+### Step 1: Create `filepaths.json`
+
+In the **root of your project**, create a file named `filepaths.json` and add your desired app paths and URLs:
+
+```json
+{
+  "Spotify": "C:\\Users\\Lenovo\\AppData\\Roaming\\Spotify\\Spotify.exe",
+  "YouTube": "https://www.youtube.com/",
+  "Linked-in": "https://www.linkedin.com/feed/",
+  "Naukri": "https://www.naukri.com/mnjuser/homepage",
+  "Indeed": "https://in.indeed.com/",
+  "leetcode": "https://leetcode.com/problemset/",
+  "hacktoberfest": "https://hacktoberfest.com/profile/",
+  "coursera-rag": "https://www.coursera.org/learn/retrieval-augmented-generation-rag/"
+}
+```
+
+> 💡 **Tips:**
+> - For **desktop apps** → use the full `.exe` path (Windows) or app path (Mac/Linux)
+> - For **websites** → use the full URL starting with `https://`
+> - Use double backslashes `\\` for Windows paths
+> - Key names are case-insensitive when Zera searches them
+
+---
+
+### Step 2: How Zera Uses It
+
+Zera reads `filepaths.json` at startup and maps each key to its path. When you say or type something like:
+
+```
+User: Open Spotify
+User: Open YouTube
+User: Open leetcode
+```
+
+Zera will:
+- **Desktop apps** → launch the `.exe` directly using `subprocess` or `os.startfile`
+- **URLs** → open in your default browser using `webbrowser.open()`
+
+---
+
+### Step 3: Add More Entries Anytime
+
+Simply edit `filepaths.json` and add a new line:
+
+```json
+{
+  "GitHub": "https://github.com/",
+  "VS Code": "C:\\Users\\Lenovo\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+}
+```
+
+No restart needed if Zera reloads the file dynamically.
+
+---
+
+### 📁 File Explorer: Project Structure
+
+```
+zera/
+├── filepaths.json          # ← Your app & URL shortcuts
+├── modules/
+│   └── file_explorer.py    # ← Handles open commands
+└── ...
+```
+
+---
+
 ## ▶️ Run the Application
 
 Once all dependencies and models are ready, start the chatbot:
@@ -107,14 +179,21 @@ Enjoy chatting with **Zera – Your Personal AI Assistant** 🎙️🤖
 
 Once running, **Zera** can:
 - 🗣️ Talk with you using natural speech (Edge TTS or pyttsx3).  
-- 💬 Respond intelligently using Ollama’s LLM models.  
+- 💬 Respond intelligently using Ollama's LLM models.  
 - 🌐 Fetch live news or knowledge using NewsAPI and Wikipedia.  
+- 🗂️ Open apps and websites via the File Explorer feature.  
 - 🎨 Provide a clean, interactive UI with Streamlit.  
 
 Example commands:
 ```
-User: What’s the latest news about AI?
+User: What's the latest news about AI?
 Zera: Fetching the most recent updates from trusted sources...
+
+User: Open Spotify
+Zera: Opening Spotify for you! 🎵
+
+User: Open leetcode
+Zera: Launching LeetCode in your browser! 💻
 ```
 
 ---
@@ -126,12 +205,14 @@ zera/
 ├── config/
 │   ├── zera_model.ollama        # Ollama model definition
 │   └── settings.env.example     # Example environment file
+├── filepaths.json               # App & URL shortcuts for File Explorer
 ├── main.py                      # Entry point for the app
 ├── modules/
 │   ├── speech_engine.py         # Text-to-speech logic
 │   ├── llm_handler.py           # Ollama + LangChain integration
 │   ├── news_fetcher.py          # Fetch latest news
-│   └── wiki_handler.py          # Wikipedia search utility
+│   ├── wiki_handler.py          # Wikipedia search utility
+│   └── file_explorer.py         # File Explorer / app launcher
 ├── requirements.txt / pyproject.toml
 ├── README.md
 └── .env
@@ -145,6 +226,7 @@ zera/
 ✅ **Offline and online speech synthesis**  
 ✅ **LangChain-powered reasoning**  
 ✅ **Dynamic web + Wikipedia knowledge retrieval**  
+✅ **File Explorer — open apps & websites by voice**  
 ✅ **Clean Streamlit UI**  
 ✅ **Cross-platform support (Windows / Mac / Linux)**  
 
@@ -172,7 +254,7 @@ The build output will be in the `dist/` folder.
 
 ## 🪪 License
 
-This project is licensed under the **MIT License** — you’re free to use, modify, and distribute it with attribution.
+This project is licensed under the **MIT License** — you're free to use, modify, and distribute it with attribution.
 
 ---
 
