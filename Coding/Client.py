@@ -10,7 +10,15 @@ import os
 
 load_dotenv()
 
+
+
+def create_upload_folder():
+    import os
+    os.makedirs("Upload", exist_ok=True)
+    return "Upload"
+
 def coding_agent_client(Input_propmt = None):
+    create_upload_folder()
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
     MODEL = os.getenv("MODEL")
 
