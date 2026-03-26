@@ -1,4 +1,5 @@
 import streamlit as st
+from Coding.Client import coding_agent_client
 import threading
 from langchain_ollama import OllamaLLM
 from utils.spech import speak
@@ -21,6 +22,9 @@ st.write("Type below and I’ll reply with text + speech.")
 st.sidebar.header("⚙️ Options")
 use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
 listen_news = st.sidebar.toggle("📰 Listen News")
+dev_mode = st.sidebar.toggle("turn on dev mode")
+
+
 fileExplor = st.sidebar.selectbox("File Explorer", [''] + getShortcutsList())
 openFile(fileExplor)
 
