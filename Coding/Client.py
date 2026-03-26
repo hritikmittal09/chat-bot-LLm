@@ -73,7 +73,7 @@ def coding_agent_client(Input_propmt = None):
 
         # no tool calls = final answer
         if not response.function_calls:
-            print(response.text)
+            return (response.text)
             break
 
         # append model response to history
