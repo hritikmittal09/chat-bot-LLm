@@ -1,4 +1,4 @@
-' Silent launcher for Chat-Bot LLM
+                                                                             ' Silent launcher for Chat-Bot LLM
 ' This runs the .bat file without showing a CMD window on startup
 ' Place this .vbs file in E:\chat-bot-LLm\ alongside run_chatbot.bat
 
