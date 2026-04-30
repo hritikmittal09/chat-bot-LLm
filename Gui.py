@@ -1,6 +1,7 @@
 
 import streamlit as st
 import threading
+import queue
 from pathlib import Path
 
 # --- Imports ---
@@ -15,6 +16,10 @@ from Uicomponents.clock import sidebar_timer
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")
+
+# Global variables for thread communication
+news_queue = queue.Queue()
+speaking = False
 
 # --- Page Config ---
 st.set_page_config(page_title="Chatbot with Voice", page_icon="🤖")
@@ -86,59 +91,50 @@ if not dev_mode and st.sidebar.button("🎙 Voice Input"):
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-if "speaking_news" not in st.session_state:
-    st.session_state.speaking_news = False
-
-if "news_buffer" not in st.session_state:
-    st.session_state.news_buffer = None
-
 
 # =========================
 # 📰 News Feature (Disabled in Dev Mode)
 # =========================
-def fetch_and_speak_news(callback):
+def fetch_and_speak_news():
+    global speaking
     try:
         titles = news()
         if not titles:
-            callback("⚠️ No news found.")
+            news_queue.put("⚠️ No news found.")
             return
 
         news_text = "Here are the latest news:\\n\\n" + "\\n".join([f"- {t}" for t in titles])
-        callback(news_text)
+        news_queue.put(news_text)
 
-        st.session_state.speaking_news = True
+        speaking = True
         for t in titles:
-            if not st.session_state.speaking_news:
+            if not speaking:
                 break
             speak(t)
 
     except Exception as e:
-        callback(f"❌ Error: {e}")
-
-
-def update_news_buffer(text):
-    st.session_state.news_buffer = text
+        news_queue.put(f"❌ Error: {e}")
 
 
 if not dev_mode and listen_news:
-    if not st.session_state.speaking_news and st.session_state.news_buffer is None:
+    if not speaking and news_queue.empty():
         with st.spinner("📰 Fetching news..."):
             threading.Thread(
                 target=fetch_and_speak_news,
-                args=(update_news_buffer,),
                 daemon=True
             ).start()
 else:
-    st.session_state.speaking_news = False
+    speaking = False
 
 
-# Add news to chat
-if st.session_state.news_buffer:
+# Process news from queue
+if not news_queue.empty():
+    text = news_queue.get()
     st.session_state.messages.append({
         "role": "assistant",
-        "content": st.session_state.news_buffer
+        "content": text
     })
-    st.session_state.news_buffer = None
+    st.rerun()
 
 
 # =========================
