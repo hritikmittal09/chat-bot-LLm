@@ -85,8 +85,9 @@ uv pip install -r pyproject.toml
 1. Duplicate `.env.example` → rename it to `.env`  
 2. Add your API keys and configurations inside `.env`:
    ```env
-   NEWS_API_KEY=your_newsapi_key_here
-   OLLAMA_MODEL=zera
+   news_api_key=your_news_api_key_here
+   GEMINI_API_KEY=your_gemini_api_key_here
+   MODEL=your_model_name_here
    ```
 
 ---
