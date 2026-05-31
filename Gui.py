@@ -180,9 +180,12 @@ if user_input:
 
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # 🔊 Speak only in normal mode
-    if not dev_mode:
-        speak(response)
+    # 🔊 Speak in background thread (works in both modes)
+    threading.Thread(
+        target=speak,
+        args=(response,),
+        daemon=True
+    ).start()
 
 
 # =========================
