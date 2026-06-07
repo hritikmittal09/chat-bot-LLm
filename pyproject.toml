@@ -6,13 +6,16 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "edge-tts>=7.2.3",
+    "faiss-cpu>=1.14.2",
     "google-genai>=1.68.0",
     "langchain>=0.3.27",
+    "langchain-community>=0.3.31",
     "langchain-ollama>=0.3.7",
     "newsapi-python>=0.2.7",
     "ollama>=0.5.3",
     "pyaudio>=0.2.14",
     "pyinstaller>=6.15.0",
+    "pypdf>=6.13.0",
     "python-dotenv>=1.1.1",
     "pyttsx3>=2.99",
     "requests>=2.31.0",
