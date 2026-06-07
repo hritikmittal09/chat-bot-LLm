@@ -25,6 +25,8 @@ The project uses the following dependencies:
 | `edge-tts` | >=7.2.3 | For text-to-speech conversion (Edge TTS) |
 | `langchain` | >=0.3.27 | Core LangChain library for building LLM-powered apps |
 | `langchain-ollama` | >=0.3.7 | Integration of LangChain with Ollama models |
+| `langchain-community` | >=0.3.0 | Community integrations for LangChain |
+| `faiss-cpu` | >=1.8.0 | Vector similarity search for PDF QNA |
 | `newsapi-python` | >=0.2.7 | Fetch real-time news articles |
 | `ollama` | >=0.5.3 | Ollama LLM runtime |
 | `pyinstaller` | >=6.15.0 | Package app into executable format |
@@ -77,6 +79,49 @@ uv pip install -r pyproject.toml
    ```bash
    ollama run zera
    ```
+
+5. **Pull the Embedding Model (for PDF Reader)**
+   ```bash
+   ollama pull nomic-embed-text
+   ```
+
+6. **Start Ollama Server**
+   ```bash
+   ollama serve
+   ```
+
+---
+
+## 📖 PDF Reader Mode
+
+**New Feature:** Upload PDFs and ask questions about them using **RAG (Retrieval-Augmented Generation)**!
+
+### How to Use:
+
+1. **Toggle PDF Reader** in the sidebar: "📖 PDF Reader"
+2. **Upload a PDF** using the file uploader
+3. **Wait for processing** (text is split into chunks and embedded)
+4. **Ask questions** about the PDF content
+5. **Zera answers** based on PDF context (with text-to-speech)
+
+### Technical Details:
+
+- **Embedding Model:** `nomic-embed-text` (dedicated embeddings)
+- **LLM:** `zera` model answers questions
+- **Vector DB:** FAISS for fast similarity search
+- **Chunk Size:** 800 characters with 100-char overlap
+- **Retrieval:** Top 2 relevant chunks per question
+
+### File Structure:
+```
+pdf_reader/
+├── reader.py      # PDFReader class
+└── __init__.py    # Module exports
+
+Storage:
+├── pdf_reader/db/     # Vector database (auto-created)
+└── Upload/            # Uploaded PDFs
+```
 
 ---
 

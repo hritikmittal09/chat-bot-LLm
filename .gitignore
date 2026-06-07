@@ -5,7 +5,6 @@ build/
 dist/
 wheels/
 *.egg-info
-*.json
 *.env
 # Virtual environments
 .venv/
@@ -15,8 +14,21 @@ main.py - Shortcut.lnk
 models/
 filepaths.json
 *.spec
-*.json
 Calculartor
 
 test.txt
-upload
+
+# Vector Databases (PDF Reader)
+pdf_reader/db/
+vector_db/
+vector_db_pdf/
+
+# Uploaded files
+Upload/
+upload/
+
+# OS specific
+.DS_Store
+.vscode/
+*.log
+

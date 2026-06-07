@@ -13,6 +13,7 @@ from news import news
 from File_Explore import getShortcutsList, openFile
 from utils.voice_input import user_voiceInput
 from Uicomponents.clock import sidebar_timer
+from pdf_reader import PDFReader
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")
@@ -31,11 +32,19 @@ st.sidebar.header("⚙️ Options")
 use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
 listen_news = st.sidebar.toggle("📰 Listen News")
 dev_mode = st.sidebar.toggle("🛠 Dev Mode (Coding Agent Only)")
+pdf_mode = st.sidebar.toggle("📖 PDF Reader")
 
 fileExplor = st.sidebar.selectbox("File Explorer", [''] + getShortcutsList())
 openFile(fileExplor)
 
 sidebar_timer()
+
+def speak_in_bg(text):
+    """Speak text in background thread"""
+    st.session_state.speaking = True
+    speak(text)
+    st.session_state.speaking = False
+
 
 # =========================
 # 📂 Upload Helper
@@ -74,6 +83,27 @@ if dev_mode:
 
 
 # =========================
+# 📖 PDF Reader Mode
+# =========================
+if pdf_mode:
+    st.sidebar.subheader("📖 PDF Reader")
+    
+    pdf_file = st.sidebar.file_uploader("Upload PDF", type=["pdf"], key="pdf_upload")
+    
+    if pdf_file:
+        # Save and load PDF
+        pdf_path = save_uploaded_file(pdf_file)
+        result = st.session_state.pdf_reader.load_pdf(str(pdf_path))
+        st.session_state.pdf_loaded = True
+        st.sidebar.info(result)
+    
+    if st.session_state.pdf_loaded and st.sidebar.button("🗑️ Clear PDF"):
+        st.session_state.pdf_reader.reset()
+        st.session_state.pdf_loaded = False
+        st.rerun()
+
+
+# =========================
 # 🎙 Voice Input (Disabled in Dev Mode)
 # =========================
 voice_input_text = None
@@ -90,6 +120,13 @@ if not dev_mode and st.sidebar.button("🎙 Voice Input"):
 # =========================
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+if "pdf_reader" not in st.session_state:
+    st.session_state.pdf_reader = PDFReader()
+    st.session_state.pdf_loaded = False
+
+if "speaking" not in st.session_state:
+    st.session_state.speaking = False
 
 
 # =========================
@@ -140,7 +177,14 @@ if not news_queue.empty():
 # =========================
 # 💬 Chat Input
 # =========================
-user_input = st.chat_input("Say something...")
+if pdf_mode:
+    if st.session_state.pdf_loaded:
+        user_input = st.chat_input("Ask question about PDF...")
+    else:
+        st.warning("⚠️ Upload a PDF first")
+        user_input = None
+else:
+    user_input = st.chat_input("Say something...")
 
 if not user_input and voice_input_text:
     user_input = voice_input_text
@@ -154,8 +198,12 @@ if user_input:
 
     with st.spinner("Thinking..."):
 
+        # ✅ PDF MODE → Ask PDF
+        if pdf_mode and st.session_state.pdf_loaded:
+            response = st.session_state.pdf_reader.ask(user_input)
+
         # ✅ DEV MODE → Coding Agent Only
-        if dev_mode:
+        elif dev_mode:
             try:
                 response = coding_agent_client(user_input)
             except Exception as e:
@@ -180,12 +228,19 @@ if user_input:
 
     st.session_state.messages.append({"role": "assistant", "content": response})
 
-    # 🔊 Speak in background thread (works in both modes)
+    # 🔊 Speak in background thread (non-blocking for all modes)
     threading.Thread(
-        target=speak,
+        target=speak_in_bg,
         args=(response,),
         daemon=True
     ).start()
+
+
+# =========================
+# 🔊 Speaking Indicator
+# =========================
+if st.session_state.speaking:
+    st.sidebar.info("🔊 Speaking...")
 
 
 # =========================

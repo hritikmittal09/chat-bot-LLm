@@ -1,32 +1,26 @@
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import OllamaEmbeddings
-import os
-path = "test.pdf"
-print(os.path.exists(path))  # sh
+"""
+⚠️ DEPRECATED - This module has been moved!
 
-# 1. Load PDF
-path = r"D:\chatbot\test.pdf" # change if your PDF name is different
-loader = PyPDFLoader(path)
-documents = loader.load()
+PDF QNA functionality has been reorganized into the pdf_reader module.
 
-# 2. Split into chunks
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,   # max chars per chunk
-    chunk_overlap=100  # keep some context between chunks
-)
-docs = splitter.split_documents(documents)
+📍 New Location: pdf_reader/
+  ├── reader.py        # PDFReader class
+  ├── pdf_utils.py     # Helper functions
+  ├── config.py        # Configuration
+  └── __init__.py      # Exports
 
-print(f"✅ PDF split into {len(docs)} chunks")
+📖 Usage:
+    from pdf_reader import PDFReader
+    
+    reader = PDFReader()
+    status = reader.load_pdf("document.pdf")
+    answer = reader.ask("Your question here")
 
-# 3. Create embeddings using Ollama
-embeddings = OllamaEmbeddings(model="zera")   # using your local model
+🔗 For more info: See pdf_reader/README.md
+"""
 
-# 4. Store in FAISS (local vector DB)
-vectorstore = FAISS.from_documents(docs, embeddings)
+# Legacy import for backward compatibility
+from pdf_reader import PDFReader
 
-# 5. Save to disk
-vectorstore.save_local("vector_db")
+__all__ = ["PDFReader"]
 
-print("✅ Vector DB created and saved in 'vector_db' folder")
