@@ -26,6 +26,7 @@ vector_db_pdf/
 # Uploaded files
 Upload/
 upload/
+pdf_reader/upload/
 
 # OS specific
 .DS_Store
