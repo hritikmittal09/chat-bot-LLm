@@ -1,7 +1,7 @@
 from google import genai
 from dotenv import load_dotenv
 from google.genai import types
-from . functions.getFileInfo import schema_get_files_info
+from . functions.getFileInfo import schema_get_files_info, schema_get_folder_content
 from . functions.get_file_content import schema_get_file_content
 from . functions.run_python_file import schema_run_python_file
 from . functions.write_file import schema_make_dir, schema_write_file
@@ -12,10 +12,12 @@ load_dotenv()
 
 
 
+
 def create_upload_folder():
     import os
-    os.makedirs("Upload", exist_ok=True)
-    return "Upload"
+    os.makedirs("upload", exist_ok=True)
+    return "upload"
+
 
 def coding_agent_client(Input_propmt = None):
     create_upload_folder()
@@ -33,6 +35,7 @@ def coding_agent_client(Input_propmt = None):
             "You are a helpful coding agent.\n"
             "Use get_files_info to list files when needed.\n"
             "Use get_file_content to read file contents when the user asks to open/read a file.\n"
+            "Use get_folder_content to read ALL files from a folder recursively when user uploads/processes an entire folder.\n"
             "use run_python_file to run a specific python file when needed when user asks run.\n"
             "use make_dir to make a directory when needed\n"
             "use write_file to write or overwrite the files if needed\n"
@@ -43,6 +46,7 @@ def coding_agent_client(Input_propmt = None):
                 function_declarations=[
                     schema_get_files_info,
                     schema_get_file_content,
+                    schema_get_folder_content,
                     schema_run_python_file,
                     schema_make_dir,
                     schema_write_file,

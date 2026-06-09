@@ -1,5 +1,5 @@
 import os
-from . functions.getFileInfo import get_files_info
+from . functions.getFileInfo import get_files_info, get_folder_content
 from . functions.get_file_content import get_file_content
 from . functions.run_python_file import run_python_file
 from . functions.write_file import make_dir, write_file
@@ -9,6 +9,7 @@ WORKING_DIR = "upload"
 tool_map = {
     "get_files_info":   get_files_info,
     "get_file_content": get_file_content,
+    "get_folder_content": get_folder_content,
     "run_python_file":  run_python_file,
     "make_dir":         make_dir,
     "write_file":       write_file,
