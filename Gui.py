@@ -13,9 +13,10 @@ from File_Explore import getShortcutsList, openFile
 from utils.voice_input import user_voiceInput
 from Uicomponents.clock import sidebar_timer
 from pdf_reader import PDFReader
-from tools.weather import get_weather
-from tools.websearch import web_search
+#from tools.weather import get_weather
+#from tools.websearch import web_search
 from ollama import chat
+from tools.tool_call import tool_map
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")
@@ -250,18 +251,13 @@ if user_input:
             # Handle tool calls
             if response.message.tool_calls:
                 for tool_call in response.message.tool_calls:
-                    if tool_call.function.name == "get_weather":
-                        city = tool_call.function.arguments["city"]
-                        tool_result = get_weather(city)
-                        messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
-                        messages.append({"role": "tool", "content": tool_result})
-                        response = chat(model="zera", messages=messages, tools=tools)
-                    elif tool_call.function.name == "web_search":
-                        query = tool_call.function.arguments["q"]
-                        tool_result = web_search(query)
-                        messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
-                        messages.append({"role": "tool", "content": tool_result})
-                        response = chat(model="zera", messages=messages, tools=tools)
+                    name = tool_call.function.name
+                    args = tool_call.function.arguments
+                    tool_result = tool_map[name](args)
+                    messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
+                    messages.append({"role": "tool", "content": str(tool_result)})
+                response = chat(model="zera", messages=messages, tools=tools)    
+                  
 
             response = response.message.content
 
