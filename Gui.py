@@ -1,4 +1,3 @@
-
 import streamlit as st
 import threading
 import queue
@@ -14,6 +13,8 @@ from File_Explore import getShortcutsList, openFile
 from utils.voice_input import user_voiceInput
 from Uicomponents.clock import sidebar_timer
 from pdf_reader import PDFReader
+from tools.weather import get_weather
+from ollama import chat
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")
@@ -209,22 +210,39 @@ if user_input:
             except Exception as e:
                 response = f"❌ Coding Agent Error: {e}"
 
-        # ✅ NORMAL MODE → Ollama + Features
+        # ✅ NORMAL MODE → Ollama + Tools
         else:
-            context = ""
-            if use_wiki:
-                wiki_info = wiki_summary(user_input, sentences=6)
-                if not wiki_info.startswith("Error"):
-                    context = f"\\n\\nWikipedia says:\\n{wiki_info}\\n\\n"
+            tools = [
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "get_weather",
+                        "description": "Get weather of a city",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "city": {"type": "string"}
+                            },
+                            "required": ["city"]
+                        }
+                    }
+                }
+            ]
 
-            final_prompt = f"""
-            You are a helpful assistant.
-            {context}
-            User asked: "{user_input}"
-            Provide a clear and concise answer.
-            """
+            messages = [{"role": "user", "content": user_input}]
+            response = chat(model="zera", messages=messages, tools=tools)
 
-            response = llm.invoke(final_prompt)
+            # Handle tool calls
+            if response.message.tool_calls:
+                for tool_call in response.message.tool_calls:
+                    if tool_call.function.name == "get_weather":
+                        city = tool_call.function.arguments["city"]
+                        tool_result = get_weather(city)
+                        messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
+                        messages.append({"role": "tool", "content": tool_result})
+                        response = chat(model="zera", messages=messages, tools=tools)
+
+            response = response.message.content
 
     st.session_state.messages.append({"role": "assistant", "content": response})
 
