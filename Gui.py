@@ -14,6 +14,7 @@ from utils.voice_input import user_voiceInput
 from Uicomponents.clock import sidebar_timer
 from pdf_reader import PDFReader
 from tools.weather import get_weather
+from tools.websearch import web_search
 from ollama import chat
 
 # ✅ Initialize Ollama
@@ -226,6 +227,20 @@ if user_input:
                             "required": ["city"]
                         }
                     }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "web_search",
+                        "description": "Search the web for information using DuckDuckGo search engine. Use this tool to find real-time information , facts, and answers to questions from the internet.",
+                        "parameters": {
+                            "type": "object",
+                            "properties": {
+                                "q": {"type": "string", "description": "Search query to find information on the web"}
+                            },
+                            "required": ["q"]
+                        }
+                    }
                 }
             ]
 
@@ -238,6 +253,12 @@ if user_input:
                     if tool_call.function.name == "get_weather":
                         city = tool_call.function.arguments["city"]
                         tool_result = get_weather(city)
+                        messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
+                        messages.append({"role": "tool", "content": tool_result})
+                        response = chat(model="zera", messages=messages, tools=tools)
+                    elif tool_call.function.name == "web_search":
+                        query = tool_call.function.arguments["q"]
+                        tool_result = web_search(query)
                         messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
                         messages.append({"role": "tool", "content": tool_result})
                         response = chat(model="zera", messages=messages, tools=tools)
