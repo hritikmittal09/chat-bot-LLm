@@ -244,6 +244,172 @@ Zera: Launching LeetCode in your browser! 💻
 
 ---
 
+## 🛠️ Zera Ollama Tool Features
+
+**Zera** is equipped with powerful Ollama-integrated tools that extend its capabilities beyond conversation. These tools enable the AI to perform real-world tasks autonomously.
+
+### 🌍 Web & Information Tools
+
+#### 1. **Web Search** 🔍
+- **Purpose:** Search the internet for real-time information
+- **When Used:** Current events, recent news, product information, trending topics
+- **Integration:** Uses DuckDuckGo Search via LangChain
+- **Example:**
+  ```
+  User: What's the latest news about AI advancements?
+  Zera: [Searches the web] Here are the latest developments...
+  ```
+
+#### 2. **Weather Information** ⛅
+- **Purpose:** Get real-time weather data for any city
+- **API:** wttr.in (Free weather API)
+- **Details Provided:** Current temperature, conditions, wind, humidity
+- **Example:**
+  ```
+  User: What's the weather in London?
+  Zera: [Fetches weather data] The weather in London is...
+  ```
+
+---
+
+### 📁 File System Tools
+
+Zera can read, write, and manage files in the **upload/** working directory.
+
+#### 3. **Get File Content** 📄
+- **Purpose:** Read and display file contents
+- **Limit:** First 10,000 characters (truncated for long files)
+- **Supported:** .txt, .md, .json, .py, .csv, and more
+- **Example:**
+  ```
+  User: Read the file notes.txt
+  Zera: [Reads file] Here's the content...
+  ```
+
+#### 4. **Get File Info** ℹ️
+- **Purpose:** List files and folder structure
+- **Retrieves:** File names, types, sizes, and directory listings
+- **Example:**
+  ```
+  User: What files are in the upload folder?
+  Zera: [Lists files] I found the following files...
+  ```
+
+#### 5. **Get Folder Content** 📂
+- **Purpose:** Explore directory structure recursively
+- **Shows:** All subdirectories and files with organization
+- **Example:**
+  ```
+  User: Show me the folder structure
+  Zera: [Maps directory] Here's the complete structure...
+  ```
+
+#### 6. **Write File** ✍️
+- **Purpose:** Create or modify text files
+- **Location:** Files are saved in the **upload/** directory
+- **Example:**
+  ```
+  User: Create a file called summary.txt with "Hello World"
+  Zera: [Creates file] File saved successfully!
+  ```
+
+#### 7. **Make Directory** 📁
+- **Purpose:** Create new folders in the working directory
+- **Example:**
+  ```
+  User: Create a folder called "projects"
+  Zera: [Creates directory] Folder created successfully!
+  ```
+
+#### 8. **Run Python File** 🐍
+- **Purpose:** Execute Python scripts directly
+- **Safety:** Runs only scripts in the **upload/** directory
+- **Output:** Returns script execution results
+- **Example:**
+  ```
+  User: Run the analysis.py script
+  Zera: [Executes script] Script output: ...
+  ```
+
+---
+
+### 📚 Knowledge Tools
+
+#### 9. **PDF Reader with RAG** 📖
+- **Purpose:** Extract information from PDF documents
+- **Technology:** Retrieval-Augmented Generation (RAG)
+- **How It Works:**
+  1. Upload PDF → Zera processes and embeds the text
+  2. Ask Questions → Zera retrieves relevant sections
+  3. Get Answers → Based on PDF context with AI reasoning
+- **Vector DB:** FAISS for fast similarity search
+- **Example:**
+  ```
+  User: [Uploads research_paper.pdf] Summarize the findings
+  Zera: [Retrieves relevant sections] The key findings are...
+  ```
+
+#### 10. **Wikipedia Search** 🔎
+- **Purpose:** Retrieve encyclopedia knowledge
+- **Used For:** Historical facts, general knowledge, explanations
+- **Example:**
+  ```
+  User: Tell me about the French Revolution
+  Zera: [Searches Wikipedia] The French Revolution was...
+  ```
+
+#### 11. **News API** 📰
+- **Purpose:** Fetch real-time news articles
+- **Requires:** `news_api_key` in `.env` file
+- **Coverage:** Global news sources and topics
+- **Example:**
+  ```
+  User: Latest news about technology
+  Zera: [Fetches from NewsAPI] Here are top stories...
+  ```
+
+---
+
+### 🎯 How Zera Chooses Tools
+
+Zera uses **intelligent tool selection** via Ollama's function calling:
+
+1. **Analyzes your request** → Understands the intent
+2. **Selects appropriate tool(s)** → Weather, Web Search, File ops, etc.
+3. **Executes with context** → Passes parameters intelligently
+4. **Synthesizes response** → Combines tool results with reasoning
+5. **Speaks the answer** → Uses text-to-speech for delivery
+
+**Example Multi-Tool Flow:**
+```
+User: "Create a file with today's weather in Paris and top tech news"
+
+Zera:
+  1. Uses Weather Tool → Gets Paris weather data
+  2. Uses Web Search Tool → Fetches latest tech news
+  3. Uses Write File Tool → Creates results.txt
+  4. Speaks confirmation → "Done! Created file with info."
+```
+
+---
+
+### ⚙️ Tool Configuration
+
+Tools are defined in two main files:
+
+**[tools/tools_schema.py](tools/tools_schema.py)** - Function schemas for Ollama  
+**[tools/tool_call.py](tools/tool_call.py)** - Function execution mapping
+
+To add a new tool:
+1. Create the function in `tools/`
+2. Add schema definition in `tools_schema.py`
+3. Map execution in `tool_call.py`
+4. Include in Ollama prompt context
+
+---
+
+---
+
 ## 🧰 Project Structure
 
 ```
