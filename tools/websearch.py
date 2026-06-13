@@ -4,7 +4,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 def web_search(q):
     search = DuckDuckGoSearchRun()
     result = search.run(q)
-    print(result)
+    #print(result)
     return result
 
 if __name__== "__main__":

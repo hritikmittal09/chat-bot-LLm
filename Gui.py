@@ -17,6 +17,7 @@ from pdf_reader import PDFReader
 #from tools.websearch import web_search
 from ollama import chat
 from tools.tool_call import tool_map
+from tools.tools_schema import tools_schemas
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")
@@ -214,36 +215,7 @@ if user_input:
 
         # ✅ NORMAL MODE → Ollama + Tools
         else:
-            tools = [
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "get_weather",
-                        "description": "Get weather of a city",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "city": {"type": "string"}
-                            },
-                            "required": ["city"]
-                        }
-                    }
-                },
-                {
-                    "type": "function",
-                    "function": {
-                        "name": "web_search",
-                        "description": "Search the web for information using DuckDuckGo search engine. Use this tool to find real-time information , facts, and answers to questions from the internet.",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {
-                                "q": {"type": "string", "description": "Search query to find information on the web"}
-                            },
-                            "required": ["q"]
-                        }
-                    }
-                }
-            ]
+            tools = tools_schemas
 
             messages = [{"role": "user", "content": user_input}]
             response = chat(model="zera", messages=messages, tools=tools)
