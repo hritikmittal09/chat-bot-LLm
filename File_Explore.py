@@ -14,17 +14,26 @@ def loadFilesPaths():
    except Exception as e :
       print("Unble to load file paths")
  
+
+
 def getShortcutsList():
  loadFilesPaths()
  return list(files.keys())
-def openFile(fileName :str):
-    if fileName == '':
-        return
-    elif files[fileName].startswith('http') :
-       webbrowser.open(files[fileName])
-       print("i am here !")
-       return
-    else :
-        
-        os.startfile( files[fileName])
-        return
+
+
+def openFile(fileName: str):
+
+    fileName = fileName.lower().strip()
+
+    path = files.get(fileName)
+
+    if not path:
+        return f"{fileName} shortcut not found"
+
+    if path.startswith("http"):
+        webbrowser.open(path)
+        return f"Opened website: {path}"
+
+    else:
+        os.startfile(path)
+        return f"Opened application: {path}"
