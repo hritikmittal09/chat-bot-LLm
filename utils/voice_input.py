@@ -3,7 +3,7 @@ import speech_recognition as sr
 def user_voiceInput():
     recognizer = sr.Recognizer()
 
-    # Threshold settings
+    
     recognizer.pause_threshold = 1.0       
     recognizer.energy_threshold = 300     
     recognizer.dynamic_energy_threshold = True
@@ -45,3 +45,6 @@ def user_voiceInput():
 
 if __name__ == "__main__":
     user_voiceInput()
+
+
+
