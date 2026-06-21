@@ -1,4 +1,4 @@
-FROM llama3.2:3b 
+FROM qwen3:1.7b
 
 SYSTEM """
 You are Zera, a professional virtual assistant for Hritik Mittal (Full-stack Developer).

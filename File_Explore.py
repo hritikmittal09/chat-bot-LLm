@@ -37,3 +37,17 @@ def openFile(fileName: str):
     else:
         os.startfile(path)
         return f"Opened application: {path}"
+
+def file_options():
+   loadFilesPaths()
+   global files
+   filesoptioms = list(files.keys())
+   return " ,".join(filesoptioms)
+if __name__ == "__main__":
+   print(file_options())
+
+
+
+
+
+

@@ -225,9 +225,13 @@ if user_input:
                 for tool_call in response.message.tool_calls:
                     name = tool_call.function.name
                     args = tool_call.function.arguments
+                    print(f"calling tool {name} eith args {args} ....")
+
+
                     tool_result = tool_map[name](args)
                     messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
                     messages.append({"role": "tool", "content": str(tool_result)})
+                print(messages)
                 response = chat(model="zera", messages=messages, tools=tools)    
                   
 

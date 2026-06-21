@@ -1,3 +1,6 @@
+
+from File_Explore import file_options
+
 open_file_schema = {
     "type": "function",
     "function": {
@@ -8,7 +11,7 @@ open_file_schema = {
             "properties": {
                 "fileName": {
                     "type": "string",
-                    "description": "Shortcut name of the file, folder, or website to open"
+                    "description": f"Shortcut name of the file, folder, or website to open  you can open {file_options()} with this tools"
                 }
             },
             "required": ["fileName"]
@@ -60,3 +63,4 @@ tools_schemas = [
                 web_search_schema,
                 
             ]
+
