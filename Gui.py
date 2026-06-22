@@ -232,7 +232,7 @@ if user_input:
                     tool_result = tool_map[name](args)
                     messages.append({"role": "assistant", "content": response.message.content, "tool_calls": [tool_call]})
                     messages.append({"role": "tool", "content": str(tool_result)})
-                print(messages)
+                #print(messages)
                 response = chat(model="zera", messages=messages, tools=tools)    
                   
 
