@@ -33,7 +33,7 @@ st.write("Type below and I’ll reply with text + speech.")
 
 # --- Sidebar ---
 st.sidebar.header("⚙️ Options")
-use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
+#use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
 listen_news = st.sidebar.toggle("📰 Listen News")
 dev_mode = st.sidebar.toggle("🛠 Dev Mode (Coding Agent Only)")
 pdf_mode = st.sidebar.toggle("📖 PDF Reader")
@@ -41,7 +41,8 @@ pdf_mode = st.sidebar.toggle("📖 PDF Reader")
 fileExplor = st.sidebar.selectbox("File Explorer", [''] + getShortcutsList())
 openFile(fileExplor)
 
-sidebar_timer()
+#sidebar_timer() # TODO timer is not working disabling for noow
+
 
 def speak_in_bg(text):
     """Speak text in background thread"""
