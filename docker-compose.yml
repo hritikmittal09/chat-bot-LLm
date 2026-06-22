@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+
+  ollama:
+    build:
+      context: ./config
+      dockerfile: Dockerfile
+
+    container_name: zera-ollama
+
+    ports:
+      - "11434:11434"
+
+    volumes:
+      - ollama_data:/root/.ollama
+
+    env_file:
+      - .env
+
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: zera-ui
+
+    depends_on:
+      - ollama
+
+    ports:
+      - "8501:8501"
+
+    env_file:
+      - .env
+
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+
+    volumes:
+      - .:/app
+
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
