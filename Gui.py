@@ -21,6 +21,7 @@ from tools.tools_schema import tools_schemas
 
 # ✅ Initialize Ollama
 llm = OllamaLLM(model="zera")
+listen_news = False
 
 # Global variables for thread communication
 news_queue = queue.Queue()
@@ -34,7 +35,7 @@ st.write("Type below and I’ll reply with text + speech.")
 # --- Sidebar ---
 st.sidebar.header("⚙️ Options")
 #use_wiki = st.sidebar.checkbox("🔎 Use Online Search ")
-listen_news = st.sidebar.toggle("📰 Listen News")
+#listen_news = st.sidebar.toggle("📰 Listen News")
 dev_mode = st.sidebar.toggle("🛠 Dev Mode (Coding Agent Only)")
 pdf_mode = st.sidebar.toggle("📖 PDF Reader")
 
