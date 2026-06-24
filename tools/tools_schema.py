@@ -90,7 +90,7 @@ tools_schemas = [
                 open_file_schema,
                 get_eeather_sechma,
                 web_search_schema,
-                get_memery
+                #get_memery
                 
             ]
 
