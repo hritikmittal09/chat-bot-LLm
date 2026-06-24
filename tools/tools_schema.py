@@ -1,5 +1,6 @@
 
 from File_Explore import file_options
+from tools.Memory.create_memory import memory_keys
 
 open_file_schema = {
     "type": "function",
@@ -18,6 +19,34 @@ open_file_schema = {
         }
     }
 }
+
+
+get_memery =  {
+        "type": "function",
+        "function": {
+            "name": "memory",
+            "description": (
+                "Retrieve stored memory information from Memory.json "
+                f"using a specific key. you have {memory_keys()} to chose from "
+                "Use this tool whenever the user asks about saved preferences, "
+                "past conversations, personal details, or previously stored data. "
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": (
+                            "The memory key to search for inside Memory.json. "
+                            "Example: 'name', 'skills', 'project', 'favorite_language'"
+                        )
+                    }
+                },
+                "required": ["key"]
+            }
+        }
+    }
+
 
 
 web_search_schema = {
@@ -61,6 +90,7 @@ tools_schemas = [
                 open_file_schema,
                 get_eeather_sechma,
                 web_search_schema,
+                get_memery
                 
             ]
 

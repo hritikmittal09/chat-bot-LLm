@@ -31,4 +31,4 @@ upload/
 .DS_Store
 .vscode/
 *.log
-
+Memory.json
